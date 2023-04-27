@@ -1,11 +1,18 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Gluu.oidc.rp
 
-My Chrome Extension
+Relying Party Chrome Extension
 
-## Features
+## Supporting Browser
 
-- Feature 1
-- Feature 2
+- Chrome
+- Opera
+
+## Quick Install
+
+1. Unpack the zip file in release folder to a empty folder
+2. Go to Settings --> Extensions of Chrome browser
+3. Switch on the `Developer mode`
+4. Click on `Load unpacked` button to load the extension
 
 ## Install
 
