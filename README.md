@@ -2,7 +2,10 @@
 
 Relying Party Chrome Extension
 
-<div style="position: relative; padding-bottom: 56.25%; height: 0;"><iframe src="https://www.loom.com/embed/525aa9a0ec2646fda5b4e53f1a971b7a" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
+<a href="https://www.loom.com/share/525aa9a0ec2646fda5b4e53f1a971b7a">
+    <p>Loom | Free Screen & Video Recording Software | Loom - 27 April 2023 - Watch Video</p>
+    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/525aa9a0ec2646fda5b4e53f1a971b7a-with-play.gif">
+  </a>
 
 ## Supporting Browser
 
