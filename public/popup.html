@@ -1,32 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>My Chrome Extension</title>
-    <link rel="stylesheet" href="popup.css" />
-  </head>
-  <body>
-    <div class="app">
-      <p class="counter-label">Counter</p>
-      <div id="counter" class="counter"></div>
-      <div class="button-container">
-        <button id="decrementBtn" class="button">-</button>
-        <button id="incrementBtn" class="button">+</button>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gluu RP</title>
+        <!-- <link rel="stylesheet" href="https://codepen.io/gymratpacks/pen/VKzBEp#0"> -->
+        <link href='https://fonts.googleapis.com/css?family=Nunito:400,300' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="popup.css">
+    </head>
+    <body>
+      <div class="row">
+    <div class="col-md-12">
+      <div id="registerForm">
+        <h1> Gluu's RP </h1>
+        
+          <fieldset>
+            <legend><span class="error" id="errorSpanTop"></span></legend>
+            
+            <legend><span class="number">=></span> Register OIDC Client</legend>
+          
+            <label for="issuer"><b>Issuer:</b></label>
+            <input type="text" id="issuer" name="issuer" placeholder="e.g. https://<op-host>" autocomplete="off" value="https://admin-ui-test.gluu.org">
+          
+            <label for="redirectUri"><b>Redirect Url:</b></label>
+            <input type="text" id="redirectUri" name="redirectUri" placeholder="e.g. https://<op-host>/callback" autocomplete="off" value="https://admin-ui-test.gluu.org">
+         
+            <label for="acrValues"><b>Acr Values:</b></label>
+            <input type="text" id="acrValues"       name="acrValues" placeholder="e.g. basic" autocomplete="off" value="basic">
+
+            <label for="additionalParam"><b>Additional Params:</b></label>
+            <input type="text" id="additionalParam"  name="additionalParam" placeholder='e.g. {"paramOne": "valueOne", "paramTwo": "valueTwo"}' autocomplete="off">
+
+            <label for="scope"><b>Scope:</b></label>
+            <input type="text" id="scope"       name="scope" placeholder="e.g. openid" autocomplete="off" value="openid">
+
+            <label for="scope"><b>OP hosted on untrusted domain:</b></label>
+            <input type="checkbox" id="clientExists" name="clientExists" value="clientExists">
+            <div id="existingClientIdDiv" style="display:none">
+              <label for="scope"><b>Client Id:</b></label>
+              <input type="text" id="existingClientId"   placeholder="Enter client_id here"    name="existingClientId" autocomplete="off">
+              <label for="scope"><b>Authorization URL of OP:</b></label>
+              <input type="text" id="authzUrl"   placeholder="Enter authorization URL"    name="authzUrl" autocomplete="off">
+            </div>
+
+            <legend><span class="error" id="errorSpanBot"></span></legend>
+          </fieldset>
+          <button id="sbmtButton">Register</button>
+        </div>
+        <div id="oidcClientDetails" style="display:none">
+          <fieldset>  
+          
+            <legend><span class="number">=></span> Registered Client</legend>
+
+            <label for="issuer"><b>OP Host:</b></label>
+            <input type="text" id="opHost" name="opHost" disabled>
+            
+           <label for="clientId"><b>Client Id:</b></label>
+            <input type="text" id="clientId" name="clientId" disabled>
+          
+            <label for="clientId"><b>Client Secret:</b></label>
+            <input type="text" id="clientSecret" name="clientSecret" disabled>
+            <button id="trigCodeFlowButton">Trigger Auth Code Flow</button>
+            <button id="resetButton">Reset</button>
+           </fieldset>
+        </div>
       </div>
-
-      <hr class="divider" />
-
-      <p class="title">Chrome Extension is Ready!</p>
-      <p class="subtitle">Start by updating <code>popup.html</code></p>
     </div>
-
-    <script src="popup.js"></script>
-
-    <!--
-      This HTML file opens when you click on icon from the toolbar.
-
-      To begin the development, run `npm run watch`.
-      To create a production bundle, use `npm run build`.
-    -->
+    <script type="text/javascript" src="popup.js">
+    </script>
   </body>
 </html>

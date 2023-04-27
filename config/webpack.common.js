@@ -48,6 +48,20 @@ const common = {
       },
     ],
   },
+  resolve: {
+    fallback: { 
+    "fs": false,
+    "tls": false,
+    "net": false,
+    "path": false,
+    "zlib": false,
+    "http": false,
+    "https": require.resolve('https-browserify'),
+    "stream": false,
+    "crypto": false,
+    "crypto-browserify": require.resolve('crypto-browserify'),
+     },
+  },
   plugins: [
     // Copy static assets from `public` folder to `build` folder
     new CopyWebpackPlugin({
