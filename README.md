@@ -3,7 +3,7 @@
 Relying Party Chrome Extension
 
 <a href="https://www.loom.com/share/525aa9a0ec2646fda5b4e53f1a971b7a">
-    <p>Loom | Demo Video</p>
+    <p> Demo Video</p>
     <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/525aa9a0ec2646fda5b4e53f1a971b7a-with-play.gif">
   </a>
 
