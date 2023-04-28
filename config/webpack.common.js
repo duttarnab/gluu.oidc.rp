@@ -58,8 +58,7 @@ const common = {
     "http": false,
     "https": require.resolve('https-browserify'),
     "stream": false,
-    "crypto": false,
-    "crypto-browserify": require.resolve('crypto-browserify'),
+    "crypto": require.resolve('crypto-browserify'),
      },
   },
   plugins: [
