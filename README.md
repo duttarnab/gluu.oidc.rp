@@ -21,7 +21,7 @@ Relying Party Chrome Extension
 
 ## Install
 
-Follwo the steps provided [**here**](https://github.com/dutiyesh/chrome-extension-cli).
+Follow the steps provided [**here**](https://github.com/dutiyesh/chrome-extension-cli).
 
 ## Contribution
 
