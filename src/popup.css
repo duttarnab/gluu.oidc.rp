@@ -116,6 +116,16 @@ label.light {
   text-shadow: 0 1px 0 rgba(255,255,255,0.2);
 }
 
+#box {
+  border: #384047;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  min-width: 600px
+}
+
 @media screen and (min-width: 480px) {
 
   form {
