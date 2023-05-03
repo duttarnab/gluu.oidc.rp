@@ -22,14 +22,12 @@ const qs = require('qs');
     if (!isEmpty(loginDetails) && Object.keys(JSON.parse(loginDetails)).length !== 0) {
       trigCodeFlowButton()
     } else {
-      console.log('checkDB.........else')
       checkDB();
     }
   }
 
   async function checkDB() {
     chrome.storage.local.get(["oidcClient"]).then((result) => {
-      console.log('checkDB.........')
       if (result.oidcClient != undefined) {
         console.log("Value currently is " + JSON.stringify(result.oidcClient));
 
@@ -128,7 +126,6 @@ const qs = require('qs');
 
           const tokenResponse = await axios(tokenReqOptions);
 
-
           if (
             tokenResponse &&
             tokenResponse.data &&
@@ -152,6 +149,7 @@ const qs = require('qs');
               loginDetails: {
                 'access_token': tokenResponse.data.access_token,
                 'userDetails': userInfoResponse.data,
+                'id_token': tokenResponse.data.id_token,
               }
             }).then(async () => {
               console.log("userDetails: " + userInfoResponse.data);
@@ -168,7 +166,13 @@ const qs = require('qs');
   }
 
   function logout() {
-    chrome.identity.clearAllCachedAuthTokens(() => {
+    chrome.identity.clearAllCachedAuthTokens(async () => {
+
+      const loginDetails = await new Promise((resolve, reject) => {
+        chrome.storage.local.get(["loginDetails"], (result) => {
+          resolve(JSON.stringify(result));
+        });
+      });
 
       chrome.storage.local.remove(["loginDetails"], function () {
         var error = chrome.runtime.lastError;
@@ -178,8 +182,8 @@ const qs = require('qs');
           document.getElementById('userDetailsSpan').innerHTML = ''
           showDiv(['oidcClientDetails']);
           hideDiv(['userDetailsDiv', 'registerForm']);
-          //window.location.href = `https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}&post_logout_redirect_uri=${chrome.runtime.getURL('options.html')}`
-          axios.get(`https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}`)
+          window.location.href = `https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}&post_logout_redirect_uri=${chrome.runtime.getURL('options.html')}&id_token_hint=${JSON.parse(loginDetails).loginDetails.id_token}`
+          //axios.get(`https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}`)
           checkDB();
         }
       });
@@ -203,7 +207,7 @@ const qs = require('qs');
       registerObj.default_acr_values = [acrValues]
       registerObj.additionalParam = additionalParam
       registerObj.scope = [scope, 'profile']
-      registerObj.post_logout_redirect_uri = [chrome.runtime.getURL('options.html')]
+      registerObj.post_logout_redirect_uris = [chrome.runtime.getURL('options.html')]
       registerObj.response_types = ['code']
       registerObj.grant_types = ['authorization_code', 'client_credentials']
       registerObj.application_type = 'web'
@@ -234,13 +238,6 @@ const qs = require('qs');
         registerObj: registerObj
       }, resolve);
     });
-  }
-
-
-  function uuidv4() {
-    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
   }
 
   function validateForm() {
@@ -297,6 +294,12 @@ const qs = require('qs');
     idArray.forEach(ele => {
       document.getElementById(ele).style.display = "none";
     });
+  }
+
+  function uuidv4() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
   }
 
 })();

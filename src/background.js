@@ -36,7 +36,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                         'authorization_endpoint': JSON.parse(openapiConfig).authorization_endpoint,
                         'response_type': request.registerObj.response_types,
                         'additionalParams': request.registerObj.additionalParam,
-                        'post_logout_redirect_uri': request.registerObj.post_logout_redirect_uri,
+                        'post_logout_redirect_uris': request.registerObj.post_logout_redirect_uri,
 
                      }
                   }).then(async () => {
