@@ -1,6 +1,5 @@
 'use strict';
 const fetch = require('node-fetch');
-//import './node-bundle.js';
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
    if (request.type == "register_click_event") {
@@ -36,7 +35,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
                         'acr_values': request.registerObj.default_acr_values,
                         'authorization_endpoint': JSON.parse(openapiConfig).authorization_endpoint,
                         'response_type': request.registerObj.response_types,
-                        'additionalParams': request.registerObj.additionalParam
+                        'additionalParams': request.registerObj.additionalParam,
+                        'post_logout_redirect_uri': request.registerObj.post_logout_redirect_uri,
+
                      }
                   }).then(async () => {
                      console.log("oidcClient is set for client_id: " + registrationResp.client_id);

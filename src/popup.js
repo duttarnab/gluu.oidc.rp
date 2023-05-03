@@ -7,21 +7,24 @@ const qs = require('qs');
 
   onLoad();
 
+  /**
+   * The function checks if login details are stored in local storage and triggers a code flow button if
+   * they are empty, then checks the database.
+   */
   async function onLoad() {
-    
+    showDiv(['loadingDiv'])
     const loginDetails = await new Promise((resolve, reject) => {
       chrome.storage.local.get(["loginDetails"], (result) => {
         resolve(JSON.stringify(result));
       });
     });
-    console.log('loginDetails: '+JSON.stringify(loginDetails))
-    if (loginDetails && Object.keys(loginDetails).length !== 0) {
+    if (!isEmpty(loginDetails) && Object.keys(JSON.parse(loginDetails)).length !== 0) {
       await trigCodeFlowButton()
     }
-    checkDB()
+    checkDB();
   }
 
-  function checkDB() {
+  async function checkDB() {
     chrome.storage.local.get(["oidcClient"]).then((result) => {
       if (result.oidcClient != undefined) {
         console.log("Value currently is " + JSON.stringify(result.oidcClient));
@@ -30,16 +33,19 @@ const qs = require('qs');
         document.getElementById('clientId').value = result.oidcClient.client_id
         document.getElementById('clientSecret').value = result.oidcClient.client_secret
 
-        document.getElementById('registerForm').style.display = "none";
-        document.getElementById('oidcClientDetails').style.display = "block";
+        showDiv(['oidcClientDetails']);
+        hideDiv(['registerForm']);
       } else {
-        document.getElementById('registerForm').style.display = "block";
-        document.getElementById('oidcClientDetails').style.display = "none";
+        showDiv(['registerForm']);
+        hideDiv(['oidcClientDetails']);
       }
+      //alert()
+      hideDiv(['loadingDiv'])
     });
   }
 
   async function resetClient() {
+    showDiv(['loadingDiv'])
     chrome.storage.local.remove(["oidcClient", "opConfiguration"], function () {
       var error = chrome.runtime.lastError;
       if (error) {
@@ -51,7 +57,7 @@ const qs = require('qs');
   }
 
   async function trigCodeFlowButton() {
-
+    showDiv(['loadingDiv'])
     const redirectUrl = /*chrome.runtime.getURL('redirect.html')*/chrome.identity.getRedirectURL()
     console.log('redirectUrl', redirectUrl)
     chrome.storage.local.get(["oidcClient"]).then(async (result) => {
@@ -91,13 +97,11 @@ const qs = require('qs');
 
         if (resultUrl) {
 
-          //const code = parse(resultUrl.split('?')[1]).code;
           const urlParams = new URLSearchParams(new URL(resultUrl).search)
           const code = urlParams.get('code')
           console.log('code:' + code)
           const opConfig = await new Promise((resolve, reject) => {
             chrome.storage.local.get(["opConfiguration"], (result) => {
-              //alert(JSON.stringify(result))
               resolve(JSON.stringify(result));
             });
           });
@@ -149,13 +153,11 @@ const qs = require('qs');
             }).then(async () => {
               console.log("userDetails: " + userInfoResponse.data);
               document.getElementById('userDetailsSpan').innerHTML = JSON.stringify(userInfoResponse.data)
-              document.getElementById('userDetailsDiv').style.display = "block";
-              document.getElementById('registerForm').style.display = "none";
-              document.getElementById('oidcClientDetails').style.display = "none";
 
+              showDiv(['userDetailsDiv']);
+              hideDiv(['registerForm', 'oidcClientDetails']);
+              hideDiv(['loadingDiv'])
             });
-
-            //logout();
           }
         }
       }
@@ -171,19 +173,18 @@ const qs = require('qs');
           console.error(error);
         } else {
           document.getElementById('userDetailsSpan').innerHTML = ''
-          document.getElementById('userDetailsDiv').style.display = "none";
-          document.getElementById('registerForm').style.display = "none";
-          document.getElementById('oidcClientDetails').style.display = "block";
+          showDiv(['oidcClientDetails']);
+          hideDiv(['userDetailsDiv', 'registerForm']);
+          //window.location.href = `https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}&post_logout_redirect_uri=${chrome.runtime.getURL('options.html')}`
           axios.get(`https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}`)
         }
       });
-
     });
 
   }
 
   async function submitForm() {
-
+    showDiv(['loadingDiv'])
     if (validateForm()) {
 
       var issuer = document.getElementById('issuer').value
@@ -198,7 +199,7 @@ const qs = require('qs');
       registerObj.default_acr_values = [acrValues]
       registerObj.additionalParam = additionalParam
       registerObj.scope = [scope, 'profile']
-
+      registerObj.post_logout_redirect_uri = [chrome.runtime.getURL('options.html')]
       registerObj.response_types = ['code']
       registerObj.grant_types = ['authorization_code', 'client_credentials']
       registerObj.application_type = 'web'
@@ -268,19 +269,29 @@ const qs = require('qs');
     return true;
   }
 
-  function handleClick() {
-    if (document.getElementById('clientExists').checked) {
-      document.getElementById('existingClientIdDiv').style.display = "block";
-    } else {
-      document.getElementById('existingClientIdDiv').style.display = "none";
-    }
-  }
-
   document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('sbmtButton').addEventListener('click', submitForm);
     document.getElementById('resetButton').addEventListener('click', resetClient);
     document.getElementById('trigCodeFlowButton').addEventListener('click', trigCodeFlowButton);
     document.getElementById('logoutButton').addEventListener('click', logout);
   });
+
+  function isEmpty(value) {
+    return (value == null || value.length === 0);
+  }
+
+  function showDiv(idArray) {
+    //alert(idArray)
+    idArray.forEach(ele => {
+      document.getElementById(ele).style.display = "block";
+    });
+  }
+
+  function hideDiv(idArray) {
+    //alert(idArray)
+    idArray.forEach(ele => {
+      document.getElementById(ele).style.display = "none";
+    });
+  }
 
 })();
