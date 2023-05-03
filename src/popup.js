@@ -18,14 +18,18 @@ const qs = require('qs');
         resolve(JSON.stringify(result));
       });
     });
+
     if (!isEmpty(loginDetails) && Object.keys(JSON.parse(loginDetails)).length !== 0) {
-      await trigCodeFlowButton()
+      trigCodeFlowButton()
+    } else {
+      console.log('checkDB.........else')
+      checkDB();
     }
-    checkDB();
   }
 
   async function checkDB() {
     chrome.storage.local.get(["oidcClient"]).then((result) => {
+      console.log('checkDB.........')
       if (result.oidcClient != undefined) {
         console.log("Value currently is " + JSON.stringify(result.oidcClient));
 
@@ -39,7 +43,6 @@ const qs = require('qs');
         showDiv(['registerForm']);
         hideDiv(['oidcClientDetails']);
       }
-      //alert()
       hideDiv(['loadingDiv'])
     });
   }
@@ -60,7 +63,7 @@ const qs = require('qs');
     showDiv(['loadingDiv'])
     const redirectUrl = /*chrome.runtime.getURL('redirect.html')*/chrome.identity.getRedirectURL()
     console.log('redirectUrl', redirectUrl)
-    chrome.storage.local.get(["oidcClient"]).then(async (result) => {
+    await chrome.storage.local.get(["oidcClient"]).then(async (result) => {
       if (result.oidcClient != undefined) {
         let authzUrl = result.oidcClient.authorization_endpoint +
           '?scope=' + `${result.oidcClient.scope[0]}+profile` +
@@ -177,6 +180,7 @@ const qs = require('qs');
           hideDiv(['userDetailsDiv', 'registerForm']);
           //window.location.href = `https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}&post_logout_redirect_uri=${chrome.runtime.getURL('options.html')}`
           axios.get(`https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}`)
+          checkDB();
         }
       });
     });
@@ -213,13 +217,13 @@ const qs = require('qs');
         } else {
           document.getElementById('errorSpanTop').innerHTML = 'Error in registration.'
           document.getElementById('errorSpanBot').innerHTML = 'Error in registration.'
+          hideDiv(['loadingDiv'])
         }
-
       } catch (err) {
         console.error(err)
       }
-
     }
+
   }
 
   async function register(issuer, registerObj) {
@@ -264,6 +268,7 @@ const qs = require('qs');
     if (emptyField.trim() != '') {
       document.getElementById('errorSpanTop').innerHTML = '<b>The following fields are mandatory</b>: ' + emptyField
       document.getElementById('errorSpanBot').innerHTML = '<b>The following fields are mandatory</b>: ' + emptyField
+      hideDiv(['loadingDiv'])
       return false;
     }
     return true;
