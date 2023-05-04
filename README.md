@@ -4,7 +4,7 @@
 
 [![Demo Video](![image](https://user-images.githubusercontent.com/32794267/236126798-67543a2c-fdfa-4b02-9f11-2aab11e85430.png))](https://www.youtube.com/watch?v=fahY31FtvlM)
 
-This extension is for convenient testing of authentication flows on browser.
+This extension is for convenient testing of authentication code flow on browser.
 
 ## Supporting Browser
 
