@@ -1,11 +1,10 @@
 # <img src="public/icons/icon_48.png" width="45" align="left"> Gluu.oidc.rp
 
-Relying Party Chrome Extension
+## Relying Party tool in form of a Chrome Extension. 
 
-<a href="https://www.loom.com/share/5908ad6de50e43b9bfbf15742beec3c8">
-    <p> Demo Video</p>
-    <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/525aa9a0ec2646fda5b4e53f1a971b7a-with-play.gif">
-  </a>
+[![Demo Video](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://www.youtube.com/watch?v=fahY31FtvlM)
+
+This extension is for covinient testing of authentication flow on browser.
 
 ## Supporting Browser
 
@@ -14,10 +13,11 @@ Relying Party Chrome Extension
 
 ## Quick Install
 
-1. Unpack the zip file in release folder to a empty folder
-2. Go to Settings --> Extensions of Chrome browser
+1. Unpack the zip file in /release folder of this project to an empty folder
+2. Go to `Settings --> Extensions` of Chrome browser
 3. Switch on the `Developer mode`
 4. Click on `Load unpacked` button to load the extension
+5. the extension is now ready to use
 
 ## Install
 

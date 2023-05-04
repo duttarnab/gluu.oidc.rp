@@ -183,7 +183,6 @@ const qs = require('qs');
           showDiv(['oidcClientDetails']);
           hideDiv(['userDetailsDiv', 'registerForm']);
           window.location.href = `https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}&post_logout_redirect_uri=${chrome.runtime.getURL('options.html')}&id_token_hint=${JSON.parse(loginDetails).loginDetails.id_token}`
-          //axios.get(`https://admin-ui-test.gluu.org/jans-auth/restv1/end_session?state=${uuidv4()}`)
           checkDB();
         }
       });
